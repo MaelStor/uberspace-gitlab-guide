@@ -1211,8 +1211,10 @@ Warning
 
 Replace `GITLAB_VETH_IP`, `REDIS_PORT`, `GITLAB_USERNAME` and
 `REDIS_PASSWORD` with a secure password. (See [Passwords](#passwords)).
-`REDIS_SOCKET` is put together like `/home/GITLAB_USERNAME/.redis/sock`
-(replace `GITLAB_USERNAME`).
+`REDIS_SOCKET` is put together like `/home/GITLAB_USERNAME/.redis/sock` and
+`REDIS_SAVEDIR` is where the database is dumped to for example in
+`/home/GITLAB_USERNAME/.redis` (replace `GITLAB_USERNAME`). Choose a place where
+redis has write permissions.
 
 </div>
 
@@ -1222,7 +1224,13 @@ port REDIS_PORT
 unixsocket REDIS_SOCKET
 requirepass REDIS_PASSWORD
 daemonize no
+dbfilename dump.rdp
+dir REDIS_SAVEDIR
+stop-writes-on-bgsave-error no
 ```
+
+Setting the `stop-writes-on-bgsave-error` directive to `no` tells redis to
+continue working if the database could not be dumped to the specified file.
 
 Setup the damon and create `$HOME/etc/services.d/redis.ini` with the
 following content:
